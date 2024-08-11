@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Presentación y análisis descriptivo de datos con uso de software R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Prof. Roberto Roque     alonso97roque.github.io" />
+    <script src="libs/header-attrs-2.23/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/panelset-0.3.0/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.3.0/panelset.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <script src="libs/freezeframe-5.0.2/freezeframe.min.js"></script>
+    <script src="libs/xaringanExtra-freezeframe-0.0.1/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <link href="libs/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Presentación y análisis descriptivo de datos con uso de software R
+]
+.subtitle[
+## Presentación de Datos
+]
+.author[
+### Prof. Roberto Roque <br><a href="https://alonso97roque.github.io/Presentacion-descriptivo-de-datos/Graficos1.html"> <i class="fa fa-desktop fa-fw"></i>  alonso97roque.github.io</a>
+]
+.institute[
+### Departamento de Matemática y Estatística, </br> Universidad Catolica San Pablo
+]
+
+---
+
+
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 180px;
+height: 150px;
+z-index: 0;
+background-image: url(logo2.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+
+
+
+
+## Importando datos
+
+
+```r
+rm(list = ls())
+library(readxl)
+datos &lt;- read_excel("dato4.xlsx")
+datos
+```
+
+```
+## # A tibble: 50 × 7
+##    Numero Sexo  Hermanos  Edad  Peso Ciudad   Puntaje
+##     &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+##  1      1 F            1    18    60 Lima          69
+##  2      2 F            2    19    58 Arequipa      78
+##  3      3 M            0    18    59 Cuzco         68
+##  4      4 M            1    20    58 Tacna         69
+##  5      5 F            2    21    61 Moquegua      70
+##  6      6 M            2    22    62 Lima          68
+##  7      7 M            1    20    63 Cuzco         70
+##  8      8 F            3    21    58 Cuzco         74
+##  9      9 M            1    18    59 Arequipa      75
+## 10     10 F            0    19    60 Tacna         75
+## # ℹ 40 more rows
+```
+
+
+---
+
+### Tabla de distribución de frecuencias
+
+
+
+
+.panelset[
+.panel[.panel-name[Table]
+
+
+
+```
+##          frec_abs frec_rel frec_por
+## Arequipa       15     0.30       30
+## Cuzco           9     0.18       18
+## Lima           14     0.28       28
+## Moquegua        5     0.10       10
+## Tacna           7     0.14       14
+```
+
+
+
+]
+
+
+.panel[.panel-name[R Code]
+
+```r
+fi=table(datos$Ciudad)
+hi=prop.table(table(datos$Ciudad))
+pi=hi*100
+tabla&lt;-cbind(frec_abs=fi,frec_rel=hi,frec_por=pi)
+tabla
+```
+
+]
+
+
+
+]
+
+
+---
+
+## Diagrama de barras
+
+
+.panelset[
+.panel[.panel-name[Plot]
+
+![](Graficos2_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+]
+
+.panel[.panel-name[R Code]
+
+
+```r
+x&lt;-datos$Ciudad
+gr=barplot(table(x),main = 'Grafica de barras',
+        xlab = 'Ciudades',ylab = 'Nro de personas',
+        col=c("#691616","#3ca75b","#3c75a7","#c8cf31","#de71ba"),
+        ylim = c(0,20))
+text(x=gr,y=table(x)+1,labels = table(x))
+```
+
+]
+
+
+
+]
+
+---
+
+### Barras horizontales
+
+.panelset[
+.panel[.panel-name[Plot]
+
+![](Graficos2_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+.panel[.panel-name[R Code]
+
+
+```r
+gr=barplot(table(x),main = 'Grafica de barras',
+        xlab = 'Número de personas',
+        col=c("#691616","#3ca75b","#3c75a7","#c8cf31","#de71ba"),
+        horiz = T,las=1,cex.names = 0.7,xlim = c(0,17))
+text(x=table(x)+0.5,y=gr,labels = table(x))
+```
+]
+
+
+]
+
+
+---
+
+### Sectores circulares
+
+.panelset[
+.panel[.panel-name[Plot]
+
+
+![](Graficos2_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+
+
+]
+
+
+.panel[.panel-name[R Code]
+
+```r
+frec_rel=prop.table(table(x));frec_porc=frec_rel*100
+pie(table(x),labels = paste(names(frec_porc),frec_porc,"%"),
+    main = "Grafico de sectores",
+    col=c("#ea2c0b","#3ca75b","#3c75a7","#c8cf31","#de71ba"))
+```
+
+]
+
+
+]
+
+---
+
+
+
+### Sectores circulares 3D
+
+Hay que instalar el paquete `plotrix`
+
+```
+install.packages("plotrix")
+```
+
+Luego, llamamos la libreria de mismo nombre
+
+```r
+library(plotrix)
+```
+
+
+---
+
+### Sectores circulares 3D
+
+
+.panelset[
+.panel[.panel-name[Plot]
+
+
+![](Graficos2_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+
+
+]
+
+
+.panel[.panel-name[R Code]
+
+```r
+library(plotrix)
+colores&lt;-c("#ea2c0b","#3ca75b","#3c75a7","#c8cf31","#de71ba")
+frec_porce&lt;-prop.table(table(x))*100
+nombres&lt;-paste(names(table(x)),frec_porce,"%")
+pie3D(table(x),explode = 0.2,main='Diagrama de sectores circulares',
+      col=colores)
+legend("topright",nombres,fill = colores,cex=1)
+```
+
+]
+
+
+]
+
+
+---
+
+## Variable cualitativa ordinal
+
+
+
+```r
+library(readxl)
+data1 &lt;- read_excel("datosCualitativos.xlsx",sheet="Hoja1")
+```
+
+--
+
+
+```r
+likert&lt;-data1$`Nivel satisfaccion`
+table(likert)
+```
+
+```
+## likert
+##     Insatisfecho Muy Insatisfecho   Muy Satisfecho       Satisfecho 
+##                3                2                4                6
+```
+
+--
+
+- Ordenaremos por jerarquia en los niveles de satisfacción
+
+
+```r
+new.likert&lt;-ordered(likert,levels=c("Muy Insatisfecho","Insatisfecho",
+                                    "Satisfecho","Muy Satisfecho"))
+table(new.likert)
+```
+
+```
+## new.likert
+## Muy Insatisfecho     Insatisfecho       Satisfecho   Muy Satisfecho 
+##                2                3                6                4
+```
+---
+
+### Tabla de frecuencias
+
+.panelset[
+.panel[.panel-name[Table]
+
+
+```
+##                  frec freq_rel freq_porc
+## Muy Insatisfecho    2   0.1333     13.33
+## Insatisfecho        3   0.2000     20.00
+## Satisfecho          6   0.4000     40.00
+## Muy Satisfecho      4   0.2667     26.67
+```
+]
+
+.panel[.panel-name[R Code]
+
+
+```r
+frec=table(new.likert)
+cbind(frec,freq_rel=round(prop.table(frec),4),freq_porc=round(prop.table(frec),4)*100)
+```
+]
+
+]
+
+---
+
+### Diagrama de barras
+
+.panelset[
+.panel[.panel-name[Table]
+
+![](Graficos2_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+
+.panel[.panel-name[R Code]
+
+
+```r
+gr1=barplot(table(new.likert),ylim = c(0,max(table(new.likert))*1.1),
+            col = rainbow(4),
+            main = "Nivel de satisfacción en escala Likert",
+            ylab = "Frecuencias absolutas")
+text(x=gr1,y=table(new.likert),labels = table(new.likert),pos=3)
+```
+]
+
+]
+
+
+---
+
+### Variable Estadistica Bidimensional
+
+
+```r
+library(readxl)
+data2 &lt;- read_excel("datosCualitativos.xlsx",sheet="Hoja2")
+data2
+```
+
+
+```
+## # A tibble: 10 × 2
+##    Notas Sexo  
+##    &lt;chr&gt; &lt;chr&gt; 
+##  1 A     Hombre
+##  2 A     Mujer 
+##  3 B     Hombre
+##  4 C     Mujer 
+##  5 A     Mujer 
+##  6 B     Hombre
+##  7 B     Mujer 
+##  8 B     Mujer 
+##  9 C     Hombre
+## 10 B     Mujer
+```
+
+
+---
+
+
+
+
+
+
+
+### Tabla de contingencia
+
+
+```r
+Notas&lt;-data2$Notas
+Sexo&lt;-data2$Sexo
+```
+
+
+.panelset[
+.panel[.panel-name[Frecuencias absolutas]
+
+&lt;span style='color: blue;'&gt;Distribución conjunta de las frecuencias&lt;/span&gt;
+
+
+```r
+addmargins(table(Notas,Sexo))
+```
+
+```
+##      Sexo
+## Notas Hombre Mujer Sum
+##   A        1     2   3
+##   B        2     3   5
+##   C        1     1   2
+##   Sum      4     6  10
+```
+
+
+
+]
+
+
+.panel[.panel-name[Frecuencias relativas]
+
+
+&lt;span style='color: blue;'&gt;Distribución conjunta de las proporciones respecto al total general&lt;/span&gt;
+
+```r
+addmargins(prop.table(table(Notas,Sexo)))
+```
+
+```
+##      Sexo
+## Notas Hombre Mujer Sum
+##   A      0.1   0.2 0.3
+##   B      0.2   0.3 0.5
+##   C      0.1   0.1 0.2
+##   Sum    0.4   0.6 1.0
+```
+]
+
+
+.panel[.panel-name[Frecuencias porcentuales]
+
+&lt;span style='color: blue;'&gt;Distribución conjunta de los porcentajes respecto al total general&lt;/span&gt;
+
+
+
+```r
+addmargins(prop.table(table(Notas,Sexo))*100)
+```
+
+```
+##      Sexo
+## Notas Hombre Mujer Sum
+##   A       10    20  30
+##   B       20    30  50
+##   C       10    10  20
+##   Sum     40    60 100
+```
+]
+
+]
+
+
+---
+
+
+### Distribuciones conjuntas respecto a filas y columnas
+
+
+```r
+addmargins(prop.table(table(Notas,Sexo))*100)
+```
+
+```
+##      Sexo
+## Notas Hombre Mujer Sum
+##   A       10    20  30
+##   B       20    30  50
+##   C       10    10  20
+##   Sum     40    60 100
+```
+
+Al dividir las entradas de esta tabla con los subtotales
+
+.panelset[
+.panel[.panel-name[Por filas]
+
+obtenemos la **Distribución conjunta de porcentajes respecto a los totales de filas**
+
+
+```r
+prop.table(table(Notas,Sexo),1)*100
+```
+
+```
+##      Sexo
+## Notas   Hombre    Mujer
+##     A 33.33333 66.66667
+##     B 40.00000 60.00000
+##     C 50.00000 50.00000
+```
+
+
+
+]
+
+
+.panel[.panel-name[Por columnas]
+
+obtenemos la **Distribución conjunta de porcentajes respecto a los totales de columnas**
+
+```r
+prop.table(table(Notas,Sexo),2)*100
+```
+
+```
+##      Sexo
+## Notas   Hombre    Mujer
+##     A 25.00000 33.33333
+##     B 50.00000 50.00000
+##     C 25.00000 16.66667
+```
+
+]
+
+
+]
+
+
+
+
+---
+
+## Diagrama de barras apiladas
+
+Un diagrama de barras apiladas es una herramienta visual utilizada para representar datos categóricos con la finalidad de mostrar la composición de diferentes elementos en un conjunto. 
+
+--
+
+**Características Principales:**
+
+- Comparación de categorías: Facilita la comparación entre diferentes categorías principales.
+
+- Desglose de subcategorías: Muestra cómo se desglosa cada categoría en sus subcategorías.
+
+- Visualización de proporciones: Ayuda a visualizar las proporciones de cada subcategoría dentro de la categoría principal.
+
+En R, se obtienen de aplicar `barplot` a una tabla de contingencia. Esta dibuja las barras de la segunda variable cortadas por la frecuencia de la primera variable.
+
+
+
+---
+
+### Ejemplo.
+&gt; Grafique el diagrama de barras apiladas (con frecuencias absolutas) para Notas vs Sexo
+
+--
+
+.pull-left[
+
+
+```r
+addmargins(table(Notas,Sexo))
+```
+
+```
+##      Sexo
+## Notas Hombre Mujer Sum
+##   A        1     2   3
+##   B        2     3   5
+##   C        1     1   2
+##   Sum      4     6  10
+```
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+El diagrama de barras apiladas será
+
+
+```r
+barplot(table(Notas,Sexo),col=rainbow(3),
+        legend.text = names(table(Notas)),
+        main="diagrama de barras apiladas")
+```
+
+]
+
+--
+
+.pull-right[
+
+![](Graficos2_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+]
+
+
+
+
+---
+
+### Ejemplo.
+&gt; Grafique el diagrama de barras apiladas (con porcentajes) para Notas vs Sexo
+
+--
+
+.pull-left[
+
+
+```r
+prop.table(table(Notas,Sexo),2)*100
+```
+
+```
+##      Sexo
+## Notas   Hombre    Mujer
+##     A 25.00000 33.33333
+##     B 50.00000 50.00000
+##     C 25.00000 16.66667
+```
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+Para el diagrama de barras apiladas usamos
+
+
+```r
+tablaP=prop.table(table(Notas,Sexo),2)*100
+barplot(tablaP,col = rainbow(3),
+        legend.text = names(table(Notas)),
+        main = "Diagrama de barras apiladas (%)")
+```
+
+]
+
+--
+
+.pull-right[
+
+![](Graficos2_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Diagrama de barras por bloques
+
+En vez de organizar las barras de la primera variable en una sola barra vertical, se pueden dibujar una junto a la otra mediante la opción `beside=TRUE`.
+
+---
+
+### Ejemplo.
+&gt; Grafique el diagrama de barras por bloques (con porcentajes) para Notas vs Sexo
+
+--
+
+.pull-left[
+
+
+```r
+prop.table(table(Notas,Sexo),2)*100
+```
+
+```
+##      Sexo
+## Notas   Hombre    Mujer
+##     A 25.00000 33.33333
+##     B 50.00000 50.00000
+##     C 25.00000 16.66667
+```
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+Para el diagrama de barras por bloques usamos el código R:
+
+
+```r
+g1=barplot(tablaP,col = rainbow(3),
+        legend.text = names(table(Notas)),
+        main = "Diagrama de barras por bloques (%)",
+        beside = T,ylim = c(0,max(tablaP)*1.2))
+text(x=g1,y=tablaP,labels =round(tablaP),pos=3)
+```
+
+]
+
+--
+
+.pull-right[
+
+![](Graficos2_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+]
+
+---
+
+### Ejemplo.
+&gt; Grafique el diagrama de barras por bloques (con porcentajes) para Sexo vs Notas
+
+--
+
+.pull-left[
+
+
+```r
+tablaQ=prop.table(table(Sexo,Notas),2)*100
+tablaQ
+```
+
+```
+##         Notas
+## Sexo            A        B        C
+##   Hombre 33.33333 40.00000 50.00000
+##   Mujer  66.66667 60.00000 50.00000
+```
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+
+Para el diagrama de barras por bloques usamos el código R:
+
+
+```r
+g2=barplot(tablaQ,col = c("cyan","salmon"),
+        legend.text = names(table(Sexo)),beside = TRUE,
+        main="Diagrama de barras por bloque (%)",
+        ylim = c(0,max(tablaQ)*1.2),
+        xlab = "Notas",ylab = "Porcentajes")
+text(x=g2,y=tablaQ,labels = round(tablaQ,2),pos=3)
+```
+
+]
+
+--
+
+.pull-right[
+
+![](Graficos2_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+]
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

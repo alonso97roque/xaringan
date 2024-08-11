@@ -1,0 +1,649 @@
+---
+title: "Presentación y análisis descriptivo de datos con uso de software R"
+subtitle: "Presentación de Datos"
+session: "04"
+author: 'Prof. Roberto Roque <br><a href="https://alonso97roque.github.io/Presentacion-descriptivo-de-datos/Graficos1.html"> <i class="fa fa-desktop fa-fw"></i>&nbsp; alonso97roque.github.io</a>'
+institute: "Departamento de Matemática y Estatística, </br> Universidad Catolica San Pablo"
+output:
+  xaringan::moon_reader:
+    css: "xaringan-themer.css"
+    lib_dir: libs
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+    includes:
+      in_header: header.html
+---
+
+
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "tachyons", "scribble", "panelset", "freezeframe", "clipboard"))
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         
+  mute_unhighlighted_code = FALSE
+)
+xaringanExtra::use_logo(
+  image_url = "logo2.png",
+  width = "180px",
+  height = "150px")
+```
+
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_xaringan()
+#style_duo_accent(link_color = "#8A0808",
+#                 blockquote_left_border_color = "red")
+```
+
+
+## Importando datos
+
+```{r}
+rm(list = ls())
+library(readxl)
+datos <- read_excel("dato4.xlsx")
+datos
+```
+
+
+---
+
+### Tabla de distribución de frecuencias
+
+
+
+
+.panelset[
+.panel[.panel-name[Table]
+
+
+```{r, echo=FALSE}
+fi=table(datos$Ciudad)
+hi=prop.table(table(datos$Ciudad))
+pi=hi*100
+tabla<-cbind(frec_abs=fi,frec_rel=hi,frec_por=pi)
+tabla
+```
+
+
+
+]
+
+
+.panel[.panel-name[R Code]
+```{r, eval=FALSE}
+fi=table(datos$Ciudad)
+hi=prop.table(table(datos$Ciudad))
+pi=hi*100
+tabla<-cbind(frec_abs=fi,frec_rel=hi,frec_por=pi)
+tabla
+```
+
+]
+
+
+
+]
+
+
+---
+
+## Diagrama de barras
+
+
+.panelset[
+.panel[.panel-name[Plot]
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.height = 5.5, fig.width= 15}
+x<-datos$Ciudad
+gr=barplot(table(x),main = 'Grafica de barras',
+        xlab = 'Ciudades',ylab = 'Nro de personas',
+        col=c("#691616","#3ca75b","#3c75a7","#c8cf31","#de71ba"),
+        ylim = c(0,20))
+text(x=gr,y=table(x)+1,labels = table(x))
+```
+
+]
+
+.panel[.panel-name[R Code]
+
+```{r, eval=FALSE}
+x<-datos$Ciudad
+gr=barplot(table(x),main = 'Grafica de barras',
+        xlab = 'Ciudades',ylab = 'Nro de personas',
+        col=c("#691616","#3ca75b","#3c75a7","#c8cf31","#de71ba"),
+        ylim = c(0,20))
+text(x=gr,y=table(x)+1,labels = table(x))
+```
+
+]
+
+
+
+]
+
+---
+
+### Barras horizontales
+
+.panelset[
+.panel[.panel-name[Plot]
+
+```{r, echo=FALSE, fig.height = 5.5, fig.width= 10}
+gr=barplot(table(x),main = 'Grafica de barras',
+        xlab = 'Número de personas',
+        col=c("#691616","#3ca75b","#3c75a7","#c8cf31","#de71ba"),
+        horiz = T,las=1,cex.names = 0.7,xlim = c(0,17))
+text(x=table(x)+0.5,y=gr,labels = table(x))
+```
+]
+
+.panel[.panel-name[R Code]
+
+```{r,eval=FALSE}
+gr=barplot(table(x),main = 'Grafica de barras',
+        xlab = 'Número de personas',
+        col=c("#691616","#3ca75b","#3c75a7","#c8cf31","#de71ba"),
+        horiz = T,las=1,cex.names = 0.7,xlim = c(0,17))
+text(x=table(x)+0.5,y=gr,labels = table(x))
+```
+]
+
+
+]
+
+
+---
+
+### Sectores circulares
+
+.panelset[
+.panel[.panel-name[Plot]
+
+
+```{r, echo=FALSE}
+frec_rel=prop.table(table(x));frec_porc=frec_rel*100
+pie(table(x),labels = paste(names(frec_porc),frec_porc,"%"),
+    main = "Grafico de sectores",
+    col=c("#ea2c0b","#3ca75b","#3c75a7","#c8cf31","#de71ba"))
+```
+
+
+
+]
+
+
+.panel[.panel-name[R Code]
+```{r, eval=FALSE}
+frec_rel=prop.table(table(x));frec_porc=frec_rel*100
+pie(table(x),labels = paste(names(frec_porc),frec_porc,"%"),
+    main = "Grafico de sectores",
+    col=c("#ea2c0b","#3ca75b","#3c75a7","#c8cf31","#de71ba"))
+```
+
+]
+
+
+]
+
+---
+
+
+
+### Sectores circulares 3D
+
+Hay que instalar el paquete `plotrix`
+
+```
+install.packages("plotrix")
+```
+
+Luego, llamamos la libreria de mismo nombre
+```{r,message=FALSE, warning=FALSE}
+library(plotrix)
+```
+
+
+---
+
+### Sectores circulares 3D
+
+
+.panelset[
+.panel[.panel-name[Plot]
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+colores<-c("#ea2c0b","#3ca75b","#3c75a7","#c8cf31","#de71ba")
+frec_porce<-prop.table(table(x))*100
+nombres<-paste(names(table(x)),frec_porce,"%")
+pie3D(table(x),explode = 0.2,main='Diagrama de sectores circulares',
+      col=colores)
+legend("topright",nombres,fill = colores,cex=1)
+```
+
+
+
+]
+
+
+.panel[.panel-name[R Code]
+```{r, eval=FALSE}
+library(plotrix)
+colores<-c("#ea2c0b","#3ca75b","#3c75a7","#c8cf31","#de71ba")
+frec_porce<-prop.table(table(x))*100
+nombres<-paste(names(table(x)),frec_porce,"%")
+pie3D(table(x),explode = 0.2,main='Diagrama de sectores circulares',
+      col=colores)
+legend("topright",nombres,fill = colores,cex=1)
+```
+
+]
+
+
+]
+
+
+---
+
+## Variable cualitativa ordinal
+
+
+```{r}
+library(readxl)
+data1 <- read_excel("datosCualitativos.xlsx",sheet="Hoja1")
+```
+
+--
+
+```{r}
+likert<-data1$`Nivel satisfaccion`
+table(likert)
+```
+
+--
+
+- Ordenaremos por jerarquia en los niveles de satisfacción
+
+```{r}
+new.likert<-ordered(likert,levels=c("Muy Insatisfecho","Insatisfecho",
+                                    "Satisfecho","Muy Satisfecho"))
+table(new.likert)
+```
+---
+
+### Tabla de frecuencias
+
+.panelset[
+.panel[.panel-name[Table]
+
+```{r, echo=F}
+frec=table(new.likert)
+cbind(frec,freq_rel=round(prop.table(frec),4),freq_porc=round(prop.table(frec),4)*100)
+```
+]
+
+.panel[.panel-name[R Code]
+
+```{r, eval=F}
+frec=table(new.likert)
+cbind(frec,freq_rel=round(prop.table(frec),4),freq_porc=round(prop.table(frec),4)*100)
+```
+]
+
+]
+
+---
+
+### Diagrama de barras
+
+.panelset[
+.panel[.panel-name[Table]
+
+```{r, echo=F}
+gr1=barplot(table(new.likert),ylim = c(0,max(table(new.likert))*1.1),
+            col = rainbow(4),
+            main = "Nivel de satisfacción en escala Likert",
+            ylab = "Frecuencias absolutas")
+text(x=gr1,y=table(new.likert),labels = table(new.likert),pos=3)
+```
+]
+
+.panel[.panel-name[R Code]
+
+```{r, eval=F}
+gr1=barplot(table(new.likert),ylim = c(0,max(table(new.likert))*1.1),
+            col = rainbow(4),
+            main = "Nivel de satisfacción en escala Likert",
+            ylab = "Frecuencias absolutas")
+text(x=gr1,y=table(new.likert),labels = table(new.likert),pos=3)
+```
+]
+
+]
+
+
+---
+
+### Variable Estadistica Bidimensional
+
+```{r,eval=FALSE}
+library(readxl)
+data2 <- read_excel("datosCualitativos.xlsx",sheet="Hoja2")
+data2
+```
+
+```{r,echo=FALSE}
+library(readxl)
+data2 <- read_excel("C:/Users/USER/Documents/graduacion/Cursos 2021/aModulo1/datosCualitativos.xlsx",sheet="Hoja2")
+data2
+```
+
+
+---
+
+```{r,echo=F}
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color,
+      x)
+  } else x
+}
+```
+
+
+
+
+
+### Tabla de contingencia
+
+```{r}
+Notas<-data2$Notas
+Sexo<-data2$Sexo
+```
+
+
+.panelset[
+.panel[.panel-name[Frecuencias absolutas]
+
+`r colorize("Distribución conjunta de las frecuencias", "blue")`
+
+```{r}
+addmargins(table(Notas,Sexo))
+```
+
+
+
+]
+
+
+.panel[.panel-name[Frecuencias relativas]
+
+
+`r colorize("Distribución conjunta de las proporciones respecto al total general", "blue")`
+```{r}
+addmargins(prop.table(table(Notas,Sexo)))
+```
+]
+
+
+.panel[.panel-name[Frecuencias porcentuales]
+
+`r colorize("Distribución conjunta de los porcentajes respecto al total general", "blue")`
+
+
+```{r}
+addmargins(prop.table(table(Notas,Sexo))*100)
+```
+]
+
+]
+
+
+---
+
+
+### Distribuciones conjuntas respecto a filas y columnas
+
+```{r}
+addmargins(prop.table(table(Notas,Sexo))*100)
+```
+
+Al dividir las entradas de esta tabla con los subtotales
+
+.panelset[
+.panel[.panel-name[Por filas]
+
+obtenemos la **Distribución conjunta de porcentajes respecto a los totales de filas**
+
+```{r}
+prop.table(table(Notas,Sexo),1)*100
+```
+
+
+
+]
+
+
+.panel[.panel-name[Por columnas]
+
+obtenemos la **Distribución conjunta de porcentajes respecto a los totales de columnas**
+```{r}
+prop.table(table(Notas,Sexo),2)*100
+```
+
+]
+
+
+]
+
+
+
+
+---
+
+## Diagrama de barras apiladas
+
+Un diagrama de barras apiladas es una herramienta visual utilizada para representar datos categóricos con la finalidad de mostrar la composición de diferentes elementos en un conjunto. 
+
+--
+
+**Características Principales:**
+
+- Comparación de categorías: Facilita la comparación entre diferentes categorías principales.
+
+- Desglose de subcategorías: Muestra cómo se desglosa cada categoría en sus subcategorías.
+
+- Visualización de proporciones: Ayuda a visualizar las proporciones de cada subcategoría dentro de la categoría principal.
+
+En R, se obtienen de aplicar `barplot` a una tabla de contingencia. Esta dibuja las barras de la segunda variable cortadas por la frecuencia de la primera variable.
+
+
+
+---
+
+### Ejemplo.
+> Grafique el diagrama de barras apiladas (con frecuencias absolutas) para Notas vs Sexo
+
+--
+
+.pull-left[
+
+```{r}
+addmargins(table(Notas,Sexo))
+```
+
+<br>
+<br>
+
+
+
+El diagrama de barras apiladas será
+
+```{r, eval=F}
+barplot(table(Notas,Sexo),col=rainbow(3),
+        legend.text = names(table(Notas)),
+        main="diagrama de barras apiladas")
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, echo=FALSE}
+barplot(table(Notas,Sexo),col=rainbow(3),
+        legend.text = names(table(Notas)),
+        main="diagrama de barras apiladas")
+```
+]
+
+
+
+
+---
+
+### Ejemplo.
+> Grafique el diagrama de barras apiladas (con porcentajes) para Notas vs Sexo
+
+--
+
+.pull-left[
+
+```{r}
+prop.table(table(Notas,Sexo),2)*100
+```
+
+<br>
+<br>
+
+
+
+Para el diagrama de barras apiladas usamos
+
+```{r, eval=F}
+tablaP=prop.table(table(Notas,Sexo),2)*100
+barplot(tablaP,col = rainbow(3),
+        legend.text = names(table(Notas)),
+        main = "Diagrama de barras apiladas (%)")
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, echo=FALSE}
+tablaP=prop.table(table(Notas,Sexo),2)*100
+barplot(tablaP,col = rainbow(3),
+        legend.text = names(table(Notas)),
+        main = "Diagrama de barras apiladas (%)")
+```
+]
+
+
+---
+
+## Diagrama de barras por bloques
+
+En vez de organizar las barras de la primera variable en una sola barra vertical, se pueden dibujar una junto a la otra mediante la opción `beside=TRUE`.
+
+---
+
+### Ejemplo.
+> Grafique el diagrama de barras por bloques (con porcentajes) para Notas vs Sexo
+
+--
+
+.pull-left[
+
+```{r}
+prop.table(table(Notas,Sexo),2)*100
+```
+
+<br>
+<br>
+
+
+
+Para el diagrama de barras por bloques usamos el código R:
+
+```{r, eval=F}
+g1=barplot(tablaP,col = rainbow(3),
+        legend.text = names(table(Notas)),
+        main = "Diagrama de barras por bloques (%)",
+        beside = T,ylim = c(0,max(tablaP)*1.2))
+text(x=g1,y=tablaP,labels =round(tablaP),pos=3)
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, echo=FALSE}
+g1=barplot(tablaP,col = rainbow(3),
+        legend.text = names(table(Notas)),
+        main = "Diagrama de barras por bloques (%)",
+        beside = T,ylim = c(0,max(tablaP)*1.2))
+text(x=g1,y=tablaP,labels =round(tablaP),pos=3)
+```
+]
+
+---
+
+### Ejemplo.
+> Grafique el diagrama de barras por bloques (con porcentajes) para Sexo vs Notas
+
+--
+
+.pull-left[
+
+```{r}
+tablaQ=prop.table(table(Sexo,Notas),2)*100
+tablaQ
+```
+
+<br>
+<br>
+
+
+
+Para el diagrama de barras por bloques usamos el código R:
+
+```{r, eval=F}
+g2=barplot(tablaQ,col = c("cyan","salmon"),
+        legend.text = names(table(Sexo)),beside = TRUE,
+        main="Diagrama de barras por bloque (%)",
+        ylim = c(0,max(tablaQ)*1.2),
+        xlab = "Notas",ylab = "Porcentajes")
+text(x=g2,y=tablaQ,labels = round(tablaQ,2),pos=3)
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, echo=FALSE}
+g2=barplot(tablaQ,col = c("cyan","salmon"),
+        legend.text = names(table(Sexo)),beside = TRUE,
+        main="Diagrama de barras por bloque (%)",
+        ylim = c(0,max(tablaQ)*1.2),
+        xlab = "Notas",ylab = "Porcentajes")
+text(x=g2,y=tablaQ,labels = round(tablaQ,2),pos=3)
+```
+]
+
+
